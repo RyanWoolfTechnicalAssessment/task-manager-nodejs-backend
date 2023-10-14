@@ -2,6 +2,7 @@ import {UserrolestatusAttributes} from "../../models/userrolestatus";
 import {IUserRepository} from "../implementation/IUserRepository";
 import db from "../../models/sqlconfig";
 import {ErrorResponseHandler} from "../../errorHandling/errorResponseHandler";
+import {IAddUserRoleStatusRequest} from "../../useCases/interfaces/IAddUserRoleStatusRequest";
 
 
 export class UserRepositorySequalizeImpl implements IUserRepository {
@@ -20,7 +21,7 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
 
     }
 
-    async createUserRoleStatus(userRoleStatus: { version: number; statusCode: string; statusName: string }): Promise<UserrolestatusAttributes | null>{
+    async createUserRoleStatus(userRoleStatus: IAddUserRoleStatusRequest | undefined): Promise<UserrolestatusAttributes | null>{
 
         try{
             const userRoleStatusResponse = await db.userrolestatus.create(userRoleStatus);

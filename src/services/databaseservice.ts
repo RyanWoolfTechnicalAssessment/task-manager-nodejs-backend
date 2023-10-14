@@ -3,6 +3,8 @@ import db from "../models/sqlconfig";
 import {ErrorResponseHandler} from "../errorHandling/errorResponseHandler";
 import {IUserRepository} from "../repository/implementation/IUserRepository";
 import {UserRepositorySequalizeImpl} from "../repository/interface/UserRepositorySequalizeImpl";
+import {IAddUserRoleStatus} from "../useCases/interfaces/IAddUserRoleStatus";
+import {IAddUserRoleStatusImpl} from "../useCases/implementations/AddUserRoleStatusImpl";
 
 export async function populateDatabase():Promise<void>{
 
@@ -15,32 +17,22 @@ export async function populateDatabase():Promise<void>{
 }
 
 async function populateThirdPartySystemRoleStatus():Promise<void>{
-    let activeUserrolestatusModel:UserrolestatusAttributes|null=null;
+
     const userRepository:IUserRepository = new UserRepositorySequalizeImpl();
     const activeUserrolestatus:{ version: number; statusName: string; statusCode: string; }={
         version: 1,
         statusCode: "ACTIVE",
         statusName: "ACTIVE",
     };
-
-    let inActiveUserrolestatusModel:UserrolestatusAttributes|null=null;
     const inActiveUserrolestatus:{ version: number; statusCode: string; statusName: string }={
         version: 1,
         statusCode: "IN-ACTIVE",
         statusName: "IN-ACTIVE"
     };
-
-    activeUserrolestatusModel = await userRepository.findUserRoleStatusByStatusCode(activeUserrolestatus.statusCode);
-
-    if (activeUserrolestatusModel==null) {
-        await userRepository.createUserRoleStatus(activeUserrolestatus);
-    }
-
-   inActiveUserrolestatusModel = await userRepository.findUserRoleStatusByStatusCode(inActiveUserrolestatus.statusCode);
-
-    if (inActiveUserrolestatusModel==null) {
-        await userRepository.createUserRoleStatus(inActiveUserrolestatus);
-    }
+    const addActiveUserRoleStatus:IAddUserRoleStatus = new IAddUserRoleStatusImpl(activeUserrolestatus,userRepository);
+    await addActiveUserRoleStatus.init();
+    const addInActiveUserRoleStatus:IAddUserRoleStatus = new IAddUserRoleStatusImpl(inActiveUserrolestatus,userRepository);
+    await addInActiveUserRoleStatus.init();
 
     return;
 }
