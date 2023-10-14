@@ -1,5 +1,5 @@
 import {UserrolestatusAttributes} from "../../models/userrolestatus";
-import {IUserRepository} from "../implementation/IUserRepository";
+import {IUserRepository} from "../interface/IUserRepository";
 import db from "../../models/sqlconfig";
 import {ErrorResponseHandler} from "../../errorHandling/errorResponseHandler";
 import {IAddUserRoleStatusRequest} from "../../useCases/interfaces/IAddUserRoleStatusRequest";

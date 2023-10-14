@@ -4,7 +4,7 @@ import {UserrolestatusAttributes} from "../../models/userrolestatus";
 import {IUserRepository} from "../../repository/interface/IUserRepository";
 
 
-export class AddUserRoleStatusImpl implements IAddUserRoleStatus {
+export class AddUserRoleStatusMockImpl implements IAddUserRoleStatus {
 
     addUserRoleStatusRequest: IAddUserRoleStatusRequest | undefined;
     userRoleStatus: UserrolestatusAttributes | null | undefined;
