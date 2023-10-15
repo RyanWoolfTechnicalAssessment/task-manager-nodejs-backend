@@ -1,7 +1,7 @@
-import {IAddUserRoleStatus} from "../interfaces/IAddUserRoleStatus";
-import {IAddUserRoleStatusRequest} from "../interfaces/IAddUserRoleStatusRequest";
-import {UserrolestatusAttributes} from "../../models/userrolestatus";
-import {IUserRepository} from "../../repository/interface/IUserRepository";
+import {IAddUserRoleStatus} from "../../interfaces/user/IAddUserRoleStatus";
+import {IAddUserRoleStatusRequest} from "../../interfaces/user/IAddUserRoleStatusRequest";
+import {UserrolestatusAttributes} from "../../../models/userrolestatus";
+import {IUserRepository} from "../../../repository/interface/IUserRepository";
 
 
 export class AddUserRoleStatusImpl implements IAddUserRoleStatus {

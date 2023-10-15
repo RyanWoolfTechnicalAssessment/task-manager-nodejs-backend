@@ -2,7 +2,9 @@ import {UserrolestatusAttributes} from "../../models/userrolestatus";
 import {IUserRepository} from "../interface/IUserRepository";
 import db from "../../models/sqlconfig";
 import {ErrorResponseHandler} from "../../errorHandling/errorResponseHandler";
-import {IAddUserRoleStatusRequest} from "../../useCases/interfaces/IAddUserRoleStatusRequest";
+import {IAddUserRoleStatusRequest} from "../../useCases/interfaces/user/IAddUserRoleStatusRequest";
+import {RoleAttributes} from "../../models/role";
+import {IAddRoleRequest} from "../../useCases/interfaces/user/IAddRoleRequest";
 
 
 export class UserRepositorySequalizeImpl implements IUserRepository {
@@ -26,6 +28,33 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
         try{
             const userRoleStatusResponse = await db.userrolestatus.create(userRoleStatus);
             return userRoleStatusResponse;
+        }
+        catch(err:any){
+            throw new ErrorResponseHandler("An error occurred while user role status","DB-URS-02",err.message,false);
+        }
+
+    };
+
+    async findRoleByAuthority(authority: string): Promise<RoleAttributes | null>{
+        try{
+            const role = await db.role.findOne({where: {
+                    authority: authority,
+                }})
+
+            return role;
+        }
+        catch(err:any)
+        {
+            throw new ErrorResponseHandler("An error occurred while finding ","DB-ROL-01",err.message,false);
+        }
+
+    }
+
+    async createRole(role: IAddRoleRequest | undefined): Promise<RoleAttributes | null>{
+
+        try{
+            const roleResponse = await db.role.create(role);
+            return roleResponse;
         }
         catch(err:any){
             throw new ErrorResponseHandler("An error occurred while user role status","DB-URS-02",err.message,false);
