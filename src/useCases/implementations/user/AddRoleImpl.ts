@@ -1,9 +1,9 @@
 import {IAddUserRoleStatus} from "../../interfaces/user/IAddUserRoleStatus";
-import {IAddUserRoleStatusRequest} from "../../interfaces/user/IAddUserRoleStatusRequest";
+import {IAddUserRoleStatusRequest} from "../../interfaces/user/requestObjects/IAddUserRoleStatusRequest";
 import {UserrolestatusAttributes} from "../../../models/userrolestatus";
 import {IUserRepository} from "../../../repository/interface/IUserRepository";
 import {IAddRole} from "../../interfaces/user/IAddRole";
-import {IAddRoleRequest} from "../../interfaces/user/IAddRoleRequest";
+import {IAddRoleRequest} from "../../interfaces/user/requestObjects/IAddRoleRequest";
 import {RoleAttributes} from "../../../models/role";
 
 

@@ -2,12 +2,63 @@ import {UserrolestatusAttributes} from "../../models/userrolestatus";
 import {IUserRepository} from "../interface/IUserRepository";
 import db from "../../models/sqlconfig";
 import {ErrorResponseHandler} from "../../errorHandling/errorResponseHandler";
-import {IAddUserRoleStatusRequest} from "../../useCases/interfaces/user/IAddUserRoleStatusRequest";
+import {IAddUserRoleStatusRequest} from "../../useCases/interfaces/user/requestObjects/IAddUserRoleStatusRequest";
 import {RoleAttributes} from "../../models/role";
-import {IAddRoleRequest} from "../../useCases/interfaces/user/IAddRoleRequest";
+import {IAddRoleRequest} from "../../useCases/interfaces/user/requestObjects/IAddRoleRequest";
+import { UserAttributes } from "../../models/user";
+import { IAddUserRequest } from "../../useCases/interfaces/user/requestObjects/IAddUserRequest";
+import { Op } from "sequelize";
+import { UserroleAttributes } from "../../models/user_role";
+import {IAddUserRoleRequest} from "../../useCases/interfaces/user/requestObjects/IAddUserRoleRequest";
 
 
 export class UserRepositorySequalizeImpl implements IUserRepository {
+
+
+    addUserRole(userRoleRequest: IAddUserRoleRequest): Promise<UserroleAttributes | null> {
+        try{
+            return db.userrole.create(userRoleRequest);
+        }
+        catch(err: any)
+        {
+            throw new ErrorResponseHandler("An error occurred while adding a user role","DB-USR-01",err.message,false);
+        }
+
+    }
+
+    async findRolesByAuthorityList(authorityList: string[]): Promise<RoleAttributes[] | null> {
+        
+        try{
+            const roleList = await db.role.findAll({where: {
+                authority: {[Op.in]: authorityList},
+            }})
+    
+            return roleList;
+        }
+        catch(err:any)
+        {
+            throw new ErrorResponseHandler("An error occurred while getting list of roles","DB-ROL-03",err.message,false);    
+        }
+        
+    }
+
+    async findUserByUserName(userName: string): Promise<UserAttributes | null> {
+
+
+        try{
+            const user = await db.user.findOne({where: {
+                userName: userName,
+            }});
+
+            return user;
+
+        }
+        catch(err:any)
+        {
+            throw new ErrorResponseHandler("An error occurred while finding user by username","DB-USER-01",err.message,false);
+        }
+        
+    }
     async findUserRoleStatusByStatusCode(statusCode: string): Promise<UserrolestatusAttributes | null>{
         try{
             const userRoleStatus = await db.userrolestatus.findOne({where: {
@@ -45,7 +96,7 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
         }
         catch(err:any)
         {
-            throw new ErrorResponseHandler("An error occurred while finding ","DB-ROL-01",err.message,false);
+            throw new ErrorResponseHandler("An error occurred while finding ","DB-ROL-02",err.message,false);
         }
 
     }
@@ -57,7 +108,19 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
             return roleResponse;
         }
         catch(err:any){
-            throw new ErrorResponseHandler("An error occurred while user role status","DB-URS-02",err.message,false);
+            throw new ErrorResponseHandler("An error occurred while user role status","DB-ROL-01",err.message,false);
+        }
+
+    };
+
+    async createUser(user: IAddUserRequest | undefined): Promise<UserAttributes | null>{
+
+        try{
+            const userResponse = await db.user.create(user);
+            return userResponse;
+        }
+        catch(err:any){
+            throw new ErrorResponseHandler("An error occurred while adding user","DB-USER-02",err.message,false);
         }
 
     };

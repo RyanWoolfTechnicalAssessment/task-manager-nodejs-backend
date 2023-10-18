@@ -3,9 +3,10 @@ import {IAddUserRoleStatusRequest} from "./requestObjects/IAddUserRoleStatusRequ
 import {RoleAttributes} from "../../../models/role";
 import {IAddRoleRequest} from "./requestObjects/IAddRoleRequest";
 
-export interface IAddRole{
-    role: any;
+export interface IAddUserRole{
+    userRole: any;
     init(): Promise<void>;
-    findRoleByAuthority(authority: string): Promise<RoleAttributes | null>;
-    createRole():Promise<RoleAttributes | null>;
+    findRoleById(): Promise<RoleAttributes | null>;
+    findUserById(): Promise<RoleAttributes | null>;
+    createUserRole():Promise<RoleAttributes | null>;
 }

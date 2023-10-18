@@ -1,5 +1,5 @@
 import {IAddUserRoleStatus} from "../../interfaces/user/IAddUserRoleStatus";
-import {IAddUserRoleStatusRequest} from "../../interfaces/user/IAddUserRoleStatusRequest";
+import {IAddUserRoleStatusRequest} from "../../interfaces/user/requestObjects/IAddUserRoleStatusRequest";
 import {UserrolestatusAttributes} from "../../../models/userrolestatus";
 import {IUserRepository} from "../../../repository/interface/IUserRepository";
 
@@ -22,12 +22,12 @@ export class AddUserRoleStatusImpl implements IAddUserRoleStatus {
             }
             else
             {
-                this.userRoleStatus = await this.createUserRoleStatus(this.addUserRoleStatusRequest);
+                this.userRoleStatus = await this.createUserRoleStatus();
             }
         }
 
     }
-    async createUserRoleStatus(userRoleStatusRequest: IAddUserRoleStatusRequest): Promise<UserrolestatusAttributes | null> {
+    async createUserRoleStatus(): Promise<UserrolestatusAttributes | null> {
         return await this.userRepository.createUserRoleStatus(this.addUserRoleStatusRequest);
     }
 
