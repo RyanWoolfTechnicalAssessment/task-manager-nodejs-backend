@@ -1,7 +1,5 @@
-
-
-export interface IAddUserRoleStatusRequest{
-    version: number;
-    statusName: string;
-    statusCode: string;
+export interface IAddUserRoleStatusRequest {
+  version: number;
+  statusName: string;
+  statusCode: string;
 }

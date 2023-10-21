@@ -1,16 +1,20 @@
-import {createSecretKey} from "crypto";
+import { createSecretKey } from "crypto";
 import db from "../models/sqlconfig";
-import {Model, Op} from "sequelize";
+import { Model, Op } from "sequelize";
 import * as crypto from "crypto";
-import {RegisterUserRequest, RegisterUserResponse, User} from "../definitions/user/userdefinitions";
-import {IAddUser} from "../useCases/interfaces/user/IAddUser";
-import {AddUserImpl} from "../useCases/implementations/user/AddUserImpl";
-import {IAddUserRequest} from "../useCases/interfaces/user/requestObjects/IAddUserRequest";
-import {IUserRepository} from "../repository/interface/IUserRepository";
-import {UserRepositorySequalizeImpl} from "../repository/implementation/UserRepositorySequalizeImpl";
-import {AddUserRoleImpl} from "../useCases/implementations/user/AddUserRoleImpl";
-import {IAddUserRole} from "../useCases/interfaces/user/IAddUserRole";
-import {IAddUserRoleRequest} from "../useCases/interfaces/user/requestObjects/IAddUserRoleRequest";
+import {
+  RegisterUserRequest,
+  RegisterUserResponse,
+  User,
+} from "../definitions/user/userdefinitions";
+import { IAddUser } from "../useCases/interfaces/user/IAddUser";
+import { AddUserImpl } from "../useCases/implementations/user/AddUserImpl";
+import { IAddUserRequest } from "../useCases/interfaces/user/requestObjects/IAddUserRequest";
+import { IUserRepository } from "../repository/interface/IUserRepository";
+import { UserRepositorySequalizeImpl } from "../repository/implementation/UserRepositorySequalizeImpl";
+import { AddUserRoleImpl } from "../useCases/implementations/user/AddUserRoleImpl";
+import { IAddUserRole } from "../useCases/interfaces/user/IAddUserRole";
+import { IAddUserRoleRequest } from "../useCases/interfaces/user/requestObjects/IAddUserRoleRequest";
 const log4js = require("log4js");
 
 let logger = log4js.getLogger();
@@ -69,50 +73,49 @@ logger.level = process.env.LOG_LEVEL;
 //
 // }
 
-export async function registerUser(registerUserRequest:RegisterUserRequest,assignRoleList:Array<string>): Promise<RegisterUserResponse> {
+export async function registerUser(
+  registerUserRequest: RegisterUserRequest,
+  assignRoleList: Array<string>,
+): Promise<RegisterUserResponse> {
+  logger.debug(`assignRoleList:${assignRoleList}`);
+  const userRepository: IUserRepository = new UserRepositorySequalizeImpl();
+  logger.debug(`in register user`);
 
-    logger.debug(`assignRoleList:${assignRoleList}`);
-    const userRepository:IUserRepository = new UserRepositorySequalizeImpl();
-    logger.debug(`in register user`);
+  const userObject: IAddUserRequest = {
+    userName: registerUserRequest.userName,
+    password: registerUserRequest.password,
+    enabled: true,
+    lastLogin: new Date(),
+  };
+  const addUser: IAddUser = new AddUserImpl(userObject, userRepository);
+  await addUser.init();
 
+  logger.debug(`addUser.user:${addUser.user}`);
+  if (addUser.user) {
+    for (const roleAuthority of assignRoleList) {
+      logger.debug(`roleAuthority:${roleAuthority}`);
 
-    const userObject:IAddUserRequest = {
-        userName: registerUserRequest.userName,
-        // @ts-ignore
-        password: registerUserRequest.password,
-        enabled: true,
-        lastLogin: new Date()
+      const userRoleRequest: IAddUserRoleRequest = {
+        userName: addUser.user.userName,
+        authority: roleAuthority,
+      };
+
+      const addUserRole: IAddUserRole = new AddUserRoleImpl(
+        userRoleRequest,
+        userRepository,
+      );
+      await addUserRole.init();
     }
-    const addUser:IAddUser = new AddUserImpl(userObject,userRepository);
-    await addUser.init()
+  }
 
-
-    logger.debug(`addUser.user:${addUser.user}`);
-    if(addUser.user){
-
-      for (const roleAuthority of assignRoleList) {
-          logger.debug(`roleAuthority:${roleAuthority}`);
-
-          const userRoleRequest:IAddUserRoleRequest = {
-              userName: addUser.user.userName,
-              authority: roleAuthority
-          }
-
-          const addUserRole:IAddUserRole = new AddUserRoleImpl(userRoleRequest,userRepository);
-          await addUserRole.init();
-      }
-
-    }
-
-    return {
-        success: true,
-        error: null,
-        errorCode: null,
-        errorList: null,
-        data: addUser.user
-    }
+  return {
+    success: true,
+    error: null,
+    errorCode: null,
+    errorList: null,
+    data: addUser.user,
+  };
 }
-
 
 // export async function login(loginUserRequest:LoginUserRequest): Promise<LoginUserResponse> {
 
@@ -128,7 +131,6 @@ export async function registerUser(registerUserRequest:RegisterUserRequest,assig
 //     let refreshTokenVerified:boolean = false;
 //     let verifyTokenResponse:VerifyTokenResponse;
 //     const roleList:string[]=[];
-
 
 //     if(loginUserRequest.userName!=null&&loginUserRequest.userName!=""&&loginUserRequest.password!=null&&loginUserRequest.password!=""){
 
@@ -146,7 +148,6 @@ export async function registerUser(registerUserRequest:RegisterUserRequest,assig
 //             logger.error("Error reading user from the database using username:"+error.message);
 //             errorList.push("Error reading user from the database using username");
 //         });
-
 
 //         // @ts-ignore
 //         if(thirdPartySystemModel!=null){
@@ -191,10 +192,7 @@ export async function registerUser(registerUserRequest:RegisterUserRequest,assig
 
 //         }
 
-
 //     }
-
-
 
 //     if(passwordMatch||refreshTokenVerified){
 
@@ -221,7 +219,6 @@ export async function registerUser(registerUserRequest:RegisterUserRequest,assig
 //             .setExpirationTime('10y')
 //             .sign(secretKey);
 
-
 //         refreshToken  = await new jose.SignJWT({
 //             // @ts-ignore
 //             thirdPartySystemId:thirdPartySystemModel.id
@@ -233,7 +230,6 @@ export async function registerUser(registerUserRequest:RegisterUserRequest,assig
 //             // @ts-ignore
 //             .setSubject(thirdPartySystemModel.userName)
 //             .sign(secretKey);
-
 
 //         await db.thirdpartysystemrole.findAll({
 //             where: {
@@ -268,7 +264,6 @@ export async function registerUser(registerUserRequest:RegisterUserRequest,assig
 //             logger.error("Error getting third party roles:"+error.message);
 //         });
 
-
 //         success=true;
 //     }
 
@@ -291,7 +286,6 @@ export async function registerUser(registerUserRequest:RegisterUserRequest,assig
 //         }
 
 //     } else {
-
 
 //         loginUserResponse={
 //             success: false,

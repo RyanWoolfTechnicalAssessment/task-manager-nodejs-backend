@@ -1,22 +1,22 @@
 "use strict";
-import {
-  Model,
-} from "sequelize";
+import { Model } from "sequelize";
 
 export interface UserrolestatusAttributes {
-    id: number;
-    statusCode: string;
-    statusName: string;
+  id: number;
+  statusCode: string;
+  statusName: string;
 }
 
-module.exports = (sequelize:any, DataTypes:any) => {
-  class userrolestatus extends Model<UserrolestatusAttributes>
-    implements UserrolestatusAttributes {
+module.exports = (sequelize: any, DataTypes: any) => {
+  class userrolestatus
+    extends Model<UserrolestatusAttributes>
+    implements UserrolestatusAttributes
+  {
     /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
     id!: number;
     statusCode!: string;
     statusName!: string;
@@ -29,34 +29,37 @@ module.exports = (sequelize:any, DataTypes:any) => {
     }
   }
 
-  userrolestatus.init({
-    id: {
-      type: DataTypes.BIGINT(20),
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    statusCode: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      field: "status_code",
-    },
-    statusName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      field: "status_name",
-    }
-  }, {
-    sequelize,
-    modelName: "userrolestatus",
-    freezeTableName: true,
-    tableName: "userrolestatus",
-    indexes:[
+  userrolestatus.init(
     {
-      name: 'user_statuscode_search',
-      fields: ['status_code'],
-    }
-  ]
-  });
+      id: {
+        type: DataTypes.BIGINT(20),
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      statusCode: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: "status_code",
+      },
+      statusName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: "status_name",
+      },
+    },
+    {
+      sequelize,
+      modelName: "userrolestatus",
+      freezeTableName: true,
+      tableName: "userrolestatus",
+      indexes: [
+        {
+          name: "user_statuscode_search",
+          fields: ["status_code"],
+        },
+      ],
+    },
+  );
   return userrolestatus;
 };

@@ -1,9 +1,9 @@
 export class InfrasonicError extends Error {
-    errorCode:string;
-    constructor(message: string, errorCode:string) {
-        super(message);
-        this.errorCode = errorCode;
-    }
+  errorCode: string;
+  constructor(message: string, errorCode: string) {
+    super(message);
+    this.errorCode = errorCode;
+  }
 }
 
 // TODO: Add Error code list

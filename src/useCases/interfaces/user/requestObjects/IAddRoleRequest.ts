@@ -1,6 +1,4 @@
-
-
-export interface IAddRoleRequest{
-    authority: string,
-    displayName: string,
+export interface IAddRoleRequest {
+  authority: string;
+  displayName: string;
 }
