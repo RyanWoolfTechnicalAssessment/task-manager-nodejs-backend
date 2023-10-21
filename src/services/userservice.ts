@@ -15,6 +15,7 @@ import { UserRepositorySequalizeImpl } from "../repository/implementation/UserRe
 import { AddUserRoleImpl } from "../useCases/implementations/user/AddUserRoleImpl";
 import { IAddUserRole } from "../useCases/interfaces/user/IAddUserRole";
 import { IAddUserRoleRequest } from "../useCases/interfaces/user/requestObjects/IAddUserRoleRequest";
+import {UserRole} from "../enums/enums";
 const log4js = require("log4js");
 
 let logger = log4js.getLogger();
@@ -22,7 +23,7 @@ logger.level = process.env.LOG_LEVEL;
 
 export async function registerUser(
   registerUserRequest: RegisterUserRequest,
-  assignRoleList: Array<string>,
+  assignRoleList: Array<UserRole>,
 ): Promise<RegisterUserResponse> {
   logger.debug(`assignRoleList:${assignRoleList}`);
   const userRepository: IUserRepository = new UserRepositorySequalizeImpl();
@@ -42,9 +43,11 @@ export async function registerUser(
     for (const roleAuthority of assignRoleList) {
       logger.debug(`roleAuthority:${roleAuthority}`);
 
+      const roleString = UserRole[roleAuthority];
+
       const userRoleRequest: IAddUserRoleRequest = {
         userName: addUser.user.userName,
-        authority: roleAuthority,
+        authority: roleString,
       };
 
       const addUserRole: IAddUserRole = new AddUserRoleImpl(

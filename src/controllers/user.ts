@@ -1,17 +1,14 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, {NextFunction, Request, Response} from "express";
+import {RegisterUserRequest, RegisterUserResponse,} from "../definitions/user/userdefinitions";
+import {validateRequestSchema} from "../middleware/validateRequest";
+import {registerUserValidations} from "../validations/user/registerschema";
+import {UserRole} from "../enums/enums";
+
 const log4js = require("log4js");
 let logger = log4js.getLogger();
 
-import {
-  RegisterUserRequest,
-  RegisterUserResponse,
-  User,
-} from "../definitions/user/userdefinitions";
 logger.level = process.env.LOG_LEVEL;
 const userController = express.Router();
-import { body, validationResult } from "express-validator";
-import { validateRequestSchema } from "../middleware/validateRequest";
-import { registerUserValidations } from "../validations/user/registerschema";
 const userService = require("../services/userservice");
 
 // userController.post("/login",
@@ -76,7 +73,7 @@ userController.post(
       logger.debug(`req.body.userRoles:${req.body.userRoles}`);
 
       const registerUserResponse: RegisterUserResponse =
-        await userService.registerUser(registerUserRequest, ["ROLE_CLIENT"]);
+        await userService.registerUser(registerUserRequest, [UserRole.ROLE_CLIENT]);
 
       return res.status(200).json({
         data: registerUserResponse.data,
