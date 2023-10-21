@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "start": "node build/server.js"
+    "dev": "ts-node-dev -r dotenv/config --respawn --transpile-only src/server.ts",
+    "start": "node -r dotenv/config build/server.js"
   },
   "keywords": [],
   "author": "Ryan Woolf",

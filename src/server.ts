@@ -1,4 +1,4 @@
-require("dotenv").config();
+// require("dotenv").config();
 import db from "./models/sqlconfig";
 import createAppServer from "./appsetup";
 import http from "http";
