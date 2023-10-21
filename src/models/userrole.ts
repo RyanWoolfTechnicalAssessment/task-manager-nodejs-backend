@@ -10,6 +10,12 @@ export interface UserroleAttributes {
     statusId: number;
 }
 
+export interface UserroleInputAttributes {
+  userId: number;
+  roleId: number;
+  statusId: number;
+}
+
 module.exports = (sequelize:any, DataTypes:any) => {
   class userrole extends Model<UserroleAttributes>
     implements UserroleAttributes {

@@ -6,7 +6,7 @@ import {IAddUserRequest} from "./requestObjects/IAddUserRequest";
 export interface IAddUser {
     addUserRequest:IAddUserRequest;
     hashedPassword:string | undefined;
-    user: UserAttributes | undefined;
+    user: UserAttributes | undefined | null;
 
     init(): Promise<void>;
     checkIfUserExists(): Promise<void>;

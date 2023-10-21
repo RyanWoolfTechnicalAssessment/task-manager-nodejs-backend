@@ -12,7 +12,7 @@ import {IAddUserRequest} from "../../interfaces/user/requestObjects/IAddUserRequ
 export class AddUserImpl implements IAddUser {
     addUserRequest: IAddUserRequest;
     hashedPassword: string | undefined;
-    user: UserAttributes | undefined;
+    user: UserAttributes | undefined | null;
     activeRoleStatus: UserrolestatusAttributes | undefined | null;
     applicableRoles: RoleAttributes[] | undefined;
     userRepository:IUserRepository;
@@ -60,7 +60,7 @@ export class AddUserImpl implements IAddUser {
                 lastLogin: new Date()
             };
 
-            await this.userRepository.createUser(newUser);
+            this.user = await this.userRepository.createUser(newUser);
         }
         else{
             throw new ErrorResponseHandler("Username or Password cannot be empty","UC-RUSHP-03","Username or Password cannot be empty",false);

@@ -7,7 +7,7 @@ import {IAddRoleRequest} from "../../useCases/interfaces/user/requestObjects/IAd
 import { UserAttributes } from "../../models/user";
 import { IAddUserRequest } from "../../useCases/interfaces/user/requestObjects/IAddUserRequest";
 import {Error} from "sequelize";
-import {UserroleAttributes} from "../../models/user_role";
+import {UserroleAttributes, UserroleInputAttributes} from "../../models/userrole";
 import {IAddUserRoleRequest} from "../../useCases/interfaces/user/requestObjects/IAddUserRoleRequest";
 
 
@@ -128,7 +128,13 @@ export class UserRepositoryMockImpl implements IUserRepository {
         }
     }
 
-    async addUserRole(userRoleRequest: IAddUserRoleRequest): Promise<UserroleAttributes | null> {
-        return null;
+    async createUserRole(userroleInputAttributes: UserroleInputAttributes): Promise<UserroleAttributes | null> {
+        return {
+            id: 1,
+            userId:1,
+            roleId:1,
+            statusId:1
+        };
     }
+
 }

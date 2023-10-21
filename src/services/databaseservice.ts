@@ -83,14 +83,21 @@ async function populateAdminUser() {
     console.log(`in populateAdminUser`);
     const  registerUserRequest:IAddUserRequest = {
         userName: "administrator@ryanwoolf.com",
-        password: "jdkfhsiuhwui474783",
+        password: "JUkmxSgnnqTWX4$pRXr3gB^skY6Ao$%X",
         enabled: true,
         lastLogin: new Date()
     };
 
     const userRepository:IUserRepository = new UserRepositorySequalizeImpl();
 
-    const addUser: IAddUser = new AddUserImpl(registerUserRequest,userRepository);
-    await addUser.init();
+    try{
+        const addUser: IAddUser = new AddUserImpl(registerUserRequest,userRepository);
+        await addUser.init();
+    }
+    catch(err: any)
+    {
+
+        console.log(`There was an error adding admin user:${err.message}`);
+    }
 
 }

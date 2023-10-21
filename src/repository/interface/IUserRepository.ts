@@ -4,7 +4,7 @@ import {RoleAttributes} from "../../models/role";
 import {IAddRoleRequest} from "../../useCases/interfaces/user/requestObjects/IAddRoleRequest";
 import { UserAttributes } from "../../models/user";
 import { IAddUserRequest } from "../../useCases/interfaces/user/requestObjects/IAddUserRequest";
-import { UserroleAttributes } from "../../models/user_role";
+import {UserroleAttributes, UserroleInputAttributes} from "../../models/userrole";
 import {IAddUserRoleRequest} from "../../useCases/interfaces/user/requestObjects/IAddUserRoleRequest";
 
 export interface IUserRepository {
@@ -15,6 +15,8 @@ export interface IUserRepository {
 
     findRolesByAuthorityList(authorityList: string[]): Promise<RoleAttributes[] | null>;
 
+    findRoleByAuthority(authority: string): Promise<RoleAttributes | null>;
+
     createUserRoleStatus(userRoleStatus: IAddUserRoleStatusRequest | undefined):Promise<UserrolestatusAttributes | null>;
 
     createRole(role: IAddRoleRequest | undefined):Promise<RoleAttributes | null>;
@@ -23,6 +25,6 @@ export interface IUserRepository {
 
     createUser(user: IAddUserRequest | undefined):Promise<UserAttributes | null>;
 
-    addUserRole(userRoleRequest: IAddUserRoleRequest): Promise<UserroleAttributes | null>;
+    createUserRole(userroleInputAttributes:UserroleInputAttributes): Promise<UserroleAttributes | null>;
 
 }

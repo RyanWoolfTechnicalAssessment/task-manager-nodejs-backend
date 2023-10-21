@@ -1,5 +1,6 @@
-export interface IAddUserRoleRequest{
-    userId: number;
-    roleId: number;
-    statusId: number;
+
+
+export interface IAddUserRoleRequest {
+    userName: string;
+    authority: string;
 }

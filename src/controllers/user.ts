@@ -79,7 +79,7 @@ userController.post("/register",
 
         logger.debug(`req.body.userRoles:${req.body.userRoles}`);
 
-        registerUserResponse= await userService.registerUser(registerUserRequest,req.body.userRoles);
+        registerUserResponse= await userService.registerUser(registerUserRequest,["ROLE_CLIENT"]);
 
         if(registerUserResponse.success){
             return res.status(200).json({

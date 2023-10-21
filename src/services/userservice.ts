@@ -8,7 +8,9 @@ import {AddUserImpl} from "../useCases/implementations/user/AddUserImpl";
 import {IAddUserRequest} from "../useCases/interfaces/user/requestObjects/IAddUserRequest";
 import {IUserRepository} from "../repository/interface/IUserRepository";
 import {UserRepositorySequalizeImpl} from "../repository/implementation/UserRepositorySequalizeImpl";
-const jose = require('jose');
+import {AddUserRoleImpl} from "../useCases/implementations/user/AddUserRoleImpl";
+import {IAddUserRole} from "../useCases/interfaces/user/IAddUserRole";
+import {IAddUserRoleRequest} from "../useCases/interfaces/user/requestObjects/IAddUserRoleRequest";
 const log4js = require("log4js");
 
 let logger = log4js.getLogger();
@@ -83,6 +85,24 @@ export async function registerUser(registerUserRequest:RegisterUserRequest,assig
     }
     const addUser:IAddUser = new AddUserImpl(userObject,userRepository);
     await addUser.init()
+
+
+    logger.debug(`addUser.user:${addUser.user}`);
+    if(addUser.user){
+
+      for (const roleAuthority of assignRoleList) {
+          logger.debug(`roleAuthority:${roleAuthority}`);
+
+          const userRoleRequest:IAddUserRoleRequest = {
+              userName: addUser.user.userName,
+              authority: roleAuthority
+          }
+
+          const addUserRole:IAddUserRole = new AddUserRoleImpl(userRoleRequest,userRepository);
+          await addUserRole.init();
+      }
+
+    }
 
     return {
         success: true,

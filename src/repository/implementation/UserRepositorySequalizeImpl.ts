@@ -8,7 +8,7 @@ import {IAddRoleRequest} from "../../useCases/interfaces/user/requestObjects/IAd
 import { UserAttributes } from "../../models/user";
 import { IAddUserRequest } from "../../useCases/interfaces/user/requestObjects/IAddUserRequest";
 import { Op } from "sequelize";
-import { UserroleAttributes } from "../../models/user_role";
+import {UserroleAttributes, UserroleInputAttributes} from "../../models/userrole";
 import {IAddUserRoleRequest} from "../../useCases/interfaces/user/requestObjects/IAddUserRoleRequest";
 
 
@@ -124,4 +124,16 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
         }
 
     };
+
+    async createUserRole(userroleInputAttributes:UserroleInputAttributes): Promise<UserroleAttributes | null>{
+
+        try{
+            const userRole = await db.userrole.create(userroleInputAttributes);
+            return userRole;
+        }
+        catch(err: any){
+            throw new ErrorResponseHandler("An error occurred while adding user role","DB-USRROLE-01",err.message,false);
+        }
+
+    }
 }
