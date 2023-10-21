@@ -9,13 +9,13 @@ import { UserroleInputAttributes } from "../../../models/userrole";
 
 export class AddUserRoleImpl implements IAddUserRole {
   userRepository: IUserRepository;
-  addUserRoleRequest: IAddUserRoleRequest | undefined;
+  addUserRoleRequest: IAddUserRoleRequest;
   role: RoleAttributes | null | undefined;
   user: UserAttributes | null | undefined;
   userRole: any;
   userRoleStatus: any;
   constructor(
-    addUserRoleRequest: IAddUserRoleRequest | undefined,
+    addUserRoleRequest: IAddUserRoleRequest,
     userRepository: IUserRepository,
   ) {
     this.userRepository = userRepository;
@@ -25,23 +25,20 @@ export class AddUserRoleImpl implements IAddUserRole {
     await this.checkIfRoleExists();
     await this.checkIfUserExists();
     await this.getActiveUserRoleStatus();
-    await this, this.createUserRole();
+    await this.createUserRole();
   }
 
   async checkIfRoleExists(): Promise<void> {
-    if (this.addUserRoleRequest && this.addUserRoleRequest.authority) {
+
       this.role = await this.userRepository.findRoleByAuthority(
         this.addUserRoleRequest?.authority,
       );
-    }
   }
 
   async checkIfUserExists(): Promise<void> {
-    if (this.addUserRoleRequest && this.addUserRoleRequest.userName) {
       this.user = await this.userRepository.findUserByUserName(
         this.addUserRoleRequest?.userName,
       );
-    }
   }
 
   async getActiveUserRoleStatus(): Promise<void> {

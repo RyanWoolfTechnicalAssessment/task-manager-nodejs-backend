@@ -30,7 +30,7 @@ export class UserRepositoryMockImpl implements IUserRepository {
   }
 
   async createUser(
-    user: IAddUserRequest | undefined,
+    user: IAddUserRequest | null,
   ): Promise<UserAttributes | null> {
     if (user) {
       if (user.userName == "newUser") {

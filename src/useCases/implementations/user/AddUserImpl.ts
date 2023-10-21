@@ -9,10 +9,8 @@ import { IAddUserRequest } from "../../interfaces/user/requestObjects/IAddUserRe
 
 export class AddUserImpl implements IAddUser {
   addUserRequest: IAddUserRequest;
-  hashedPassword: string | undefined;
-  user: UserAttributes | undefined | null;
-  activeRoleStatus: UserrolestatusAttributes | undefined | null;
-  applicableRoles: RoleAttributes[] | undefined;
+  hashedPassword: string = '';
+  user: UserAttributes | null | undefined;
   userRepository: IUserRepository;
   // roleList:RoleAttributes[] | null;
 
@@ -45,25 +43,14 @@ export class AddUserImpl implements IAddUser {
     }
   }
   async saltAndHashPassword(): Promise<void> {
-    if (this.addUserRequest && this.addUserRequest.password) {
-      let result: string;
       let salt = crypto.randomBytes(16).toString("base64");
       let hash = crypto
         .createHmac("sha512", salt)
         .update(this.addUserRequest.password)
         .digest("base64");
       this.hashedPassword = salt + "$" + hash;
-    } else {
-      throw new ErrorResponseHandler(
-        "Password cannot be empty",
-        "UC-RUSHP-02",
-        "Password cannot be empty",
-        false,
-      );
-    }
   }
   async createUser(): Promise<void> {
-    if (this.addUserRequest.userName && this.hashedPassword) {
       const newUser = {
         userName: this.addUserRequest.userName,
         password: this.hashedPassword,
@@ -72,13 +59,5 @@ export class AddUserImpl implements IAddUser {
       };
 
       this.user = await this.userRepository.createUser(newUser);
-    } else {
-      throw new ErrorResponseHandler(
-        "Username or Password cannot be empty",
-        "UC-RUSHP-03",
-        "Username or Password cannot be empty",
-        false,
-      );
-    }
   }
 }

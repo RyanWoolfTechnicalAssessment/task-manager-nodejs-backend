@@ -128,7 +128,7 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
   }
 
   async createUser(
-    user: IAddUserRequest | undefined,
+    user: IAddUserRequest | null,
   ): Promise<UserAttributes | null> {
     try {
       const userResponse = await db.user.create(user);

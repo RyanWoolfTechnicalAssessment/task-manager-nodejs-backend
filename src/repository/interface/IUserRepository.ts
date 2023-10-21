@@ -31,7 +31,7 @@ export interface IUserRepository {
 
   findUserByUserName(userName: string): Promise<UserAttributes | null>;
 
-  createUser(user: IAddUserRequest | undefined): Promise<UserAttributes | null>;
+  createUser(user: IAddUserRequest | null): Promise<UserAttributes | null>;
 
   createUserRole(
     userroleInputAttributes: UserroleInputAttributes,
