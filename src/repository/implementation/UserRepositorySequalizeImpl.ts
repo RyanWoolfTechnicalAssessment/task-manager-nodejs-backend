@@ -1,13 +1,13 @@
 import { UserrolestatusAttributes } from "../../models/userrolestatus";
 import { IUserRepository } from "../interface/IUserRepository";
 import db from "../../models/sqlconfig";
-import { ErrorResponseHandler } from "../../errorHandling/errorResponseHandler";
+import { CustomError } from "../../errorHandling/CustomError";
 import { IAddUserRoleStatusRequest } from "../../useCases/interfaces/user/requestObjects/IAddUserRoleStatusRequest";
 import { RoleAttributes } from "../../models/role";
 import { IAddRoleRequest } from "../../useCases/interfaces/user/requestObjects/IAddRoleRequest";
 import { UserAttributes } from "../../models/user";
 import { IAddUserRequest } from "../../useCases/interfaces/user/requestObjects/IAddUserRequest";
-import { Op } from "sequelize";
+import {Op, where} from "sequelize";
 import {
   UserroleAttributes,
   UserroleInputAttributes,
@@ -27,7 +27,7 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
 
       return roleList;
     } catch (err: any) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "An error occurred while getting list of roles",
         "DB-ROL-03",
         err.message,
@@ -46,7 +46,7 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
 
       return user;
     } catch (err: any) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "An error occurred while finding user by username",
         "DB-USER-01",
         err.message,
@@ -66,7 +66,7 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
 
       return userRoleStatus;
     } catch (err: any) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "An error occurred while finding active user role status",
         "DB-URS-01",
         err.message,
@@ -83,7 +83,7 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
         await db.userrolestatus.create(userRoleStatus);
       return userRoleStatusResponse;
     } catch (err: any) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "An error occurred while user role status",
         "DB-URS-02",
         err.message,
@@ -102,7 +102,7 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
 
       return role;
     } catch (err: any) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "An error occurred while finding ",
         "DB-ROL-02",
         err.message,
@@ -118,7 +118,7 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
       const roleResponse = await db.role.create(role);
       return roleResponse;
     } catch (err: any) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "An error occurred while user role status",
         "DB-ROL-01",
         err.message,
@@ -134,7 +134,7 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
       const userResponse = await db.user.create(user);
       return userResponse;
     } catch (err: any) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "An error occurred while adding user",
         "DB-USER-02",
         err.message,
@@ -150,11 +150,31 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
       const userRole = await db.userrole.create(userroleInputAttributes);
       return userRole;
     } catch (err: any) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "An error occurred while adding user role",
         "DB-USRROLE-01",
         err.message,
         false,
+      );
+    }
+  }
+
+  async findUserRoleByAllAttributes(userroleInputAttributes: UserroleInputAttributes): Promise<UserroleAttributes | null> {
+    try {
+      const userRole = await db.userrole.findOne({
+        where:{
+          userId:userroleInputAttributes.userId,
+          roleId:userroleInputAttributes.roleId,
+          statusId: userroleInputAttributes.statusId
+        }
+      });
+      return userRole;
+    } catch (err: any) {
+      throw new CustomError(
+          "An error occurred while finding user role",
+          "DB-USRROLE-02",
+          err.message,
+          false,
       );
     }
   }

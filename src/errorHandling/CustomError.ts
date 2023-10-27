@@ -1,4 +1,4 @@
-export class ErrorResponseHandler extends Error {
+export class CustomError extends Error {
   originalError: string;
   errorCode: string;
   sendSupportMail: boolean = false;

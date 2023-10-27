@@ -16,5 +16,6 @@ export interface IAddUserRole {
   checkIfUserExists(): Promise<void>;
   checkIfRoleExists(): Promise<void>;
   getActiveUserRoleStatus(): Promise<void>;
+  checkUserRoleExists(): Promise<void>;
   createUserRole(): Promise<void>;
 }

@@ -36,4 +36,6 @@ export interface IUserRepository {
   createUserRole(
     userroleInputAttributes: UserroleInputAttributes,
   ): Promise<UserroleAttributes | null>;
+
+  findUserRoleByAllAttributes(userroleInputAttributes: UserroleInputAttributes):Promise<UserroleAttributes | null>;
 }

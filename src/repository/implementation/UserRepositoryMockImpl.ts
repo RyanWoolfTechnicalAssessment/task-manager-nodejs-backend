@@ -1,6 +1,6 @@
 import { UserrolestatusAttributes } from "../../models/userrolestatus";
 import { IUserRepository } from "../interface/IUserRepository";
-import { ErrorResponseHandler } from "../../errorHandling/errorResponseHandler";
+import { CustomError } from "../../errorHandling/CustomError";
 import { IAddUserRoleStatusRequest } from "../../useCases/interfaces/user/requestObjects/IAddUserRoleStatusRequest";
 import { RoleAttributes } from "../../models/role";
 import { IAddRoleRequest } from "../../useCases/interfaces/user/requestObjects/IAddRoleRequest";
@@ -20,7 +20,7 @@ export class UserRepositoryMockImpl implements IUserRepository {
     try {
       return null; // Todo implement mock and test
     } catch (err: any) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "An error occurred while getting list of roles",
         "DB-ROL-03",
         err.message,
@@ -69,7 +69,7 @@ export class UserRepositoryMockImpl implements IUserRepository {
         };
       }
     } catch (err: any) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "An error occurred while finding user by username",
         "DB-USER-01",
         err.message,
@@ -92,7 +92,7 @@ export class UserRepositoryMockImpl implements IUserRepository {
         };
       }
     } catch (err: any) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "An error occurred while finding active user role status",
         "DB-URS-01",
         err.message,
@@ -112,7 +112,7 @@ export class UserRepositoryMockImpl implements IUserRepository {
       };
       return userRoleStatusResponse;
     } catch (err: any) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "An error occurred while user role status",
         "DB-URS-02",
         err.message,
@@ -144,7 +144,7 @@ export class UserRepositoryMockImpl implements IUserRepository {
         displayName: "Test Added Role Name",
       };
     } catch (err: any) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "An error occurred while user role status",
         "DB-URS-02",
         err.message,
@@ -162,5 +162,22 @@ export class UserRepositoryMockImpl implements IUserRepository {
       roleId: 1,
       statusId: 1,
     };
+  }
+
+  async findUserRoleByAllAttributes(userroleInputAttributes: UserroleInputAttributes): Promise<UserroleAttributes | null> {
+
+    if(userroleInputAttributes.userId==1){
+      return {
+        id: 1,
+        userId: 1,
+        roleId: 1,
+        statusId: 1,
+      };
+    }
+    else
+    {
+      return null
+    }
+
   }
 }

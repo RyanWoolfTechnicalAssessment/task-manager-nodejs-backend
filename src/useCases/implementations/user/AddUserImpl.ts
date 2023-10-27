@@ -1,4 +1,4 @@
-import { ErrorResponseHandler } from "../../../errorHandling/errorResponseHandler";
+import { CustomError } from "../../../errorHandling/CustomError";
 import { RoleAttributes } from "../../../models/role";
 import { UserAttributes } from "../../../models/user";
 import { UserrolestatusAttributes } from "../../../models/userrolestatus";
@@ -34,7 +34,7 @@ export class AddUserImpl implements IAddUser {
       this.addUserRequest.userName,
     );
     if (foundUser != null) {
-      throw new ErrorResponseHandler(
+      throw new CustomError(
         "A user with this username already exists",
         "UC-RUCIUE-01",
         "A user with this username already exists",

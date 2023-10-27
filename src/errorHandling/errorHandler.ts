@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { InfrasonicError } from "./infrasonicError";
-import { ErrorResponseHandler } from "./errorResponseHandler";
+import { CustomError } from "./CustomError";
 import sendSupportEmail from "./sendSupportEmail";
 const log4js = require("log4js");
 const logger = log4js.getLogger();
@@ -11,7 +11,7 @@ export const errorHandler = async (
   res: Response,
   next: () => void,
 ) => {
-  if (error instanceof ErrorResponseHandler) {
+  if (error instanceof CustomError) {
     if (error.sendSupportMail) {
       await sendSupportEmail(
         error.message,
