@@ -10,9 +10,9 @@ import { IAddRole } from "../useCases/interfaces/user/IAddRole";
 import { IAddUserRequest } from "../useCases/interfaces/user/requestObjects/IAddUserRequest";
 import { IAddUser } from "../useCases/interfaces/user/IAddUser";
 import { AddUserImpl } from "../useCases/implementations/user/AddUserImpl";
-import {IAddUserRoleRequest} from "../useCases/interfaces/user/requestObjects/IAddUserRoleRequest";
-import {AddUserRoleImpl} from "../useCases/implementations/user/AddUserRoleImpl";
-import {IAddUserRole} from "../useCases/interfaces/user/IAddUserRole";
+import { IAddUserRoleRequest } from "../useCases/interfaces/user/requestObjects/IAddUserRoleRequest";
+import { AddUserRoleImpl } from "../useCases/implementations/user/AddUserRoleImpl";
+import { IAddUserRole } from "../useCases/interfaces/user/IAddUserRole";
 
 export async function populateDatabase(): Promise<void> {
   await populateUserRoleStatus();
@@ -107,35 +107,30 @@ async function populateAdminUser() {
     );
     await addUser.init();
   } catch (err: any) {
-
-    if(err.errorCode.includes("UC-RUCIUE-01")){
+    if (err.errorCode.includes("UC-RUCIUE-01")) {
       console.log(`Admin user already exists, moving on`);
-    }
-    else
-    {
+    } else {
       console.log(`There was an error adding admin user:${err.message}`);
     }
-
   }
 }
 
-async function populateUserRole(){
-
-  try{
+async function populateUserRole() {
+  try {
     const userRepository: IUserRepository = new UserRepositorySequalizeImpl();
     const addUserRoleRequest: IAddUserRoleRequest = {
       userName: "administrator@ryanwoolf.com",
-      authority: "ROLE_ADMIN"
+      authority: "ROLE_ADMIN",
     };
 
     const addUserRole: IAddUserRole = new AddUserRoleImpl(
-        addUserRoleRequest,
-        userRepository,
+      addUserRoleRequest,
+      userRepository,
     );
     await addUserRole.init();
+  } catch (err: any) {
+    console.log(
+      `There was an error adding user roles for admin user:${err.message}`,
+    );
   }
-  catch (err: any) {
-    console.log(`There was an error adding user roles for admin user:${err.message}`);
-  }
-
 }

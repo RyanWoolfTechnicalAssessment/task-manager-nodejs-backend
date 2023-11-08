@@ -10,7 +10,7 @@ const db: any = {};
 
 let sequelize: any;
 
-//TODO find out why dotenv is not working
+console.log(`invoking sqlconfig`);
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {

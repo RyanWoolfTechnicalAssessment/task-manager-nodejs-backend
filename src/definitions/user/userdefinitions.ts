@@ -19,7 +19,7 @@ export interface VerifyTokenResponse {
   data: {
     userName: string;
     expiresIn: number | null;
-    thirdPartySystemId: number | null;
+    userId: number | null;
   } | null;
 }
 

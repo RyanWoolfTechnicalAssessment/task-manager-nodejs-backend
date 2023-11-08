@@ -7,7 +7,7 @@ import { RoleAttributes } from "../../models/role";
 import { IAddRoleRequest } from "../../useCases/interfaces/user/requestObjects/IAddRoleRequest";
 import { UserAttributes } from "../../models/user";
 import { IAddUserRequest } from "../../useCases/interfaces/user/requestObjects/IAddUserRequest";
-import {Op, where} from "sequelize";
+import { Model, Op, where } from "sequelize";
 import {
   UserroleAttributes,
   UserroleInputAttributes,
@@ -159,23 +159,91 @@ export class UserRepositorySequalizeImpl implements IUserRepository {
     }
   }
 
-  async findUserRoleByAllAttributes(userroleInputAttributes: UserroleInputAttributes): Promise<UserroleAttributes | null> {
+  async findUserRoleByAllAttributes(
+    userroleInputAttributes: UserroleInputAttributes,
+  ): Promise<UserroleAttributes | null> {
     try {
       const userRole = await db.userrole.findOne({
-        where:{
-          userId:userroleInputAttributes.userId,
-          roleId:userroleInputAttributes.roleId,
-          statusId: userroleInputAttributes.statusId
-        }
+        where: {
+          userId: userroleInputAttributes.userId,
+          roleId: userroleInputAttributes.roleId,
+          statusId: userroleInputAttributes.statusId,
+        },
       });
       return userRole;
     } catch (err: any) {
       throw new CustomError(
-          "An error occurred while finding user role",
-          "DB-USRROLE-02",
-          err.message,
-          false,
+        "An error occurred while finding user role",
+        "DB-USRROLE-02",
+        err.message,
+        false,
       );
     }
+  }
+
+  async findUserById(id: number): Promise<UserAttributes | null> {
+    try {
+      const user = await db.user.findOne({
+        where: {
+          id: id,
+        },
+      });
+
+      return user;
+    } catch (err: any) {
+      throw new CustomError(
+        "An error occurred while finding user by id",
+        "DB-USER-03",
+        err.message,
+        false,
+      );
+    }
+  }
+
+  async findAllUserRolesByUserID(userId: number): Promise<string[]> {
+    const roleList: string[] = [];
+
+    try {
+      const userRoleList: Model[] = await db.userrole.findAll({
+        where: {
+          // @ts-ignore
+          userId: userId,
+        },
+        include: [
+          {
+            model: db.userrolestatus,
+            required: true,
+            attributes: [],
+            where: {
+              statusCode: "ACTIVE",
+            },
+          },
+          {
+            model: db.role,
+            required: true,
+            attributes: ["authority"],
+          },
+        ],
+      });
+
+      for (const tempUserRoleIndex in userRoleList) {
+        if (tempUserRoleIndex != null) {
+          // @ts-ignore
+          roleList.push(
+            // @ts-ignore
+            userRoleList[tempUserRoleIndex].get("role").get("authority"),
+          );
+        }
+      }
+    } catch (err: any) {
+      throw new CustomError(
+        "An error occurred while finding user roles for user",
+        "DB-USRROLE-03",
+        err.message,
+        false,
+      );
+    }
+
+    return roleList;
   }
 }

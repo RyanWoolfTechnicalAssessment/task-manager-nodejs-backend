@@ -164,20 +164,18 @@ export class UserRepositoryMockImpl implements IUserRepository {
     };
   }
 
-  async findUserRoleByAllAttributes(userroleInputAttributes: UserroleInputAttributes): Promise<UserroleAttributes | null> {
-
-    if(userroleInputAttributes.userId==1){
+  async findUserRoleByAllAttributes(
+    userroleInputAttributes: UserroleInputAttributes,
+  ): Promise<UserroleAttributes | null> {
+    if (userroleInputAttributes.userId == 1) {
       return {
         id: 1,
         userId: 1,
         roleId: 1,
         statusId: 1,
       };
+    } else {
+      return null;
     }
-    else
-    {
-      return null
-    }
-
   }
 }

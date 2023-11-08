@@ -9,6 +9,7 @@ import {
   UserroleInputAttributes,
 } from "../../models/userrole";
 import { IAddUserRoleRequest } from "../../useCases/interfaces/user/requestObjects/IAddUserRoleRequest";
+import { Model } from "sequelize";
 
 export interface IUserRepository {
   findUserRoleStatusByStatusCode(
@@ -31,11 +32,17 @@ export interface IUserRepository {
 
   findUserByUserName(userName: string): Promise<UserAttributes | null>;
 
+  findUserById(id: number): Promise<UserAttributes | null>;
+
   createUser(user: IAddUserRequest | null): Promise<UserAttributes | null>;
 
   createUserRole(
     userroleInputAttributes: UserroleInputAttributes,
   ): Promise<UserroleAttributes | null>;
 
-  findUserRoleByAllAttributes(userroleInputAttributes: UserroleInputAttributes):Promise<UserroleAttributes | null>;
+  findUserRoleByAllAttributes(
+    userroleInputAttributes: UserroleInputAttributes,
+  ): Promise<UserroleAttributes | null>;
+
+  findAllUserRolesByUserID(userId: number): Promise<string[]>;
 }

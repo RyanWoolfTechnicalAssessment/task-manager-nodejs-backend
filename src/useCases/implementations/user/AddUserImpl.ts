@@ -1,15 +1,13 @@
 import { CustomError } from "../../../errorHandling/CustomError";
-import { RoleAttributes } from "../../../models/role";
-import { UserAttributes } from "../../../models/user";
-import { UserrolestatusAttributes } from "../../../models/userrolestatus";
-import { IUserRepository } from "../../../repository/interface/IUserRepository";
+import crypto from "crypto";
 import { IAddUser } from "../../interfaces/user/IAddUser";
-import * as crypto from "crypto";
 import { IAddUserRequest } from "../../interfaces/user/requestObjects/IAddUserRequest";
+import { UserAttributes } from "../../../models/user";
+import { IUserRepository } from "../../../repository/interface/IUserRepository";
 
 export class AddUserImpl implements IAddUser {
   addUserRequest: IAddUserRequest;
-  hashedPassword: string = '';
+  hashedPassword: string = "";
   user: UserAttributes | null | undefined;
   userRepository: IUserRepository;
   // roleList:RoleAttributes[] | null;
@@ -43,21 +41,21 @@ export class AddUserImpl implements IAddUser {
     }
   }
   async saltAndHashPassword(): Promise<void> {
-      let salt = crypto.randomBytes(16).toString("base64");
-      let hash = crypto
-        .createHmac("sha512", salt)
-        .update(this.addUserRequest.password)
-        .digest("base64");
-      this.hashedPassword = salt + "$" + hash;
+    let salt = crypto.randomBytes(16).toString("base64");
+    let hash = crypto
+      .createHmac("sha512", salt)
+      .update(this.addUserRequest.password)
+      .digest("base64");
+    this.hashedPassword = salt + "$" + hash;
   }
   async createUser(): Promise<void> {
-      const newUser = {
-        userName: this.addUserRequest.userName,
-        password: this.hashedPassword,
-        enabled: true,
-        lastLogin: new Date(),
-      };
+    const newUser = {
+      userName: this.addUserRequest.userName,
+      password: this.hashedPassword,
+      enabled: true,
+      lastLogin: new Date(),
+    };
 
-      this.user = await this.userRepository.createUser(newUser);
+    this.user = await this.userRepository.createUser(newUser);
   }
 }
