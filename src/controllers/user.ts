@@ -4,7 +4,7 @@ import {
   LoginUserResponse,
   RegisterUserRequest,
   RegisterUserResponse,
-} from "../definitions/user/userdefinitions";
+} from "../interfaces/user/user";
 import { validateRequestSchema } from "../middleware/validateRequest";
 import { registerUserValidations } from "../validations/user/registerschema";
 import { UserRole } from "../enums/enums";

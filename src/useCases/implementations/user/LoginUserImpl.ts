@@ -3,7 +3,7 @@ import {
   LoginUserRequest,
   LoginUserResponse,
   VerifyTokenResponse,
-} from "../../../definitions/user/userdefinitions";
+} from "../../../interfaces/user/user";
 import { ILoginUser } from "../../interfaces/user/ILoginUser";
 import { IAddUserRoleStatusRequest } from "../../interfaces/user/requestObjects/IAddUserRoleStatusRequest";
 import { IUserRepository } from "../../../repository/interface/IUserRepository";
@@ -57,9 +57,11 @@ export class LoginUserImpl implements ILoginUser {
       );
     }
 
-    await this.createAccessToken();
-    await this.createRefreshToken();
-    await this.findUserRoles();
+    if (this.user) {
+      await this.createAccessToken();
+      await this.createRefreshToken();
+      await this.assignUserRoles();
+    }
   }
   async loginByPassword(): Promise<void> {
     this.user = await this.userRepository.findUserByUserName(
@@ -189,9 +191,9 @@ export class LoginUserImpl implements ILoginUser {
       .sign(this.secretKey);
   }
 
-  async findUserRoles(): Promise<void> {
-    // @ts-ignore
+  async assignUserRoles(): Promise<void> {
     this.userRoleList = await this.userRepository.findAllUserRolesByUserID(
+      // @ts-ignore
       this.user.id,
     );
   }

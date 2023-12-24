@@ -22,6 +22,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       models.user.hasMany(models.userrole, {
         foreignKey: "user_id",
       });
+
+      models.user.hasMany(models.task, {
+        foreignKey: "user_id",
+      });
     }
   }
 

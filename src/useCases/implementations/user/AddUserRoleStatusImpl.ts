@@ -4,27 +4,25 @@ import { UserrolestatusAttributes } from "../../../models/userrolestatus";
 import { IUserRepository } from "../../../repository/interface/IUserRepository";
 
 export class AddUserRoleStatusImpl implements IAddUserRoleStatus {
-  addUserRoleStatusRequest: IAddUserRoleStatusRequest | undefined;
+  addUserRoleStatusRequest: IAddUserRoleStatusRequest;
   userRoleStatus: UserrolestatusAttributes | null | undefined;
   userRepository: IUserRepository;
   constructor(
-    addUserRoleStatusRequest: IAddUserRoleStatusRequest | undefined,
+    addUserRoleStatusRequest: IAddUserRoleStatusRequest,
     userRepository: IUserRepository,
   ) {
     this.addUserRoleStatusRequest = addUserRoleStatusRequest;
     this.userRepository = userRepository;
   }
   async init(): Promise<void> {
-    if (this.addUserRoleStatusRequest) {
-      const userRoleStatus = await this.findUserRoleStatusByStatusCode(
-        this.addUserRoleStatusRequest?.statusCode,
-      );
+    const userRoleStatus = await this.findUserRoleStatusByStatusCode(
+      this.addUserRoleStatusRequest?.statusCode,
+    );
 
-      if (userRoleStatus != null) {
-        this.userRoleStatus = userRoleStatus;
-      } else {
-        this.userRoleStatus = await this.createUserRoleStatus();
-      }
+    if (userRoleStatus != null) {
+      this.userRoleStatus = userRoleStatus;
+    } else {
+      this.userRoleStatus = await this.createUserRoleStatus();
     }
   }
   async createUserRoleStatus(): Promise<UserrolestatusAttributes | null> {

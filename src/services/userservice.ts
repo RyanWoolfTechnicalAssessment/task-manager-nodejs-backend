@@ -9,7 +9,7 @@ import {
   RegisterUserResponse,
   User,
   VerifyTokenResponse,
-} from "../definitions/user/userdefinitions";
+} from "../interfaces/user/user";
 import { IAddUser } from "../useCases/interfaces/user/IAddUser";
 import { AddUserImpl } from "../useCases/implementations/user/AddUserImpl";
 import { IAddUserRequest } from "../useCases/interfaces/user/requestObjects/IAddUserRequest";
@@ -28,7 +28,6 @@ import { LoginUserImpl } from "../useCases/implementations/user/LoginUserImpl";
 
 let logger = log4js.getLogger();
 logger.level = process.env.LOG_LEVEL;
-
 let testValue: number = 0;
 export async function testSingletonBehaviour(
   initialValue: number,
@@ -143,17 +142,9 @@ export async function login(
   loginUserRequest: LoginUserRequest,
 ): Promise<LoginUserResponse> {
   logger.debug(`in login service`);
-  let success = false;
   let errorList: string[] = [];
   let loginUserResponse: LoginUserResponse;
   let errorCode: string | null;
-  let userModel: UserAttributes;
-  let accessToken: string;
-  let refreshToken: string;
-  let passwordMatch: boolean = false;
-  let refreshTokenVerified: boolean = false;
-  let verifyTokenResponse: VerifyTokenResponse;
-  const roleList: string[] = [];
   const userRepository: IUserRepository = new UserRepositorySequalizeImpl();
   const loginUSer: ILoginUser = new LoginUserImpl(
     loginUserRequest,

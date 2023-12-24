@@ -3,7 +3,7 @@ import {
   LoginUserRequest,
   LoginUserResponse,
   VerifyTokenResponse,
-} from "../../../definitions/user/userdefinitions";
+} from "../../../interfaces/user/user";
 import { UserAttributes } from "../../../models/user";
 import { IUserRepository } from "../../../repository/interface/IUserRepository";
 
@@ -22,5 +22,5 @@ export interface ILoginUser {
   verifyRefreshToken(): Promise<void>;
   createAccessToken(): Promise<void>;
   createRefreshToken(): Promise<void>;
-  findUserRoles(): Promise<void>;
+  assignUserRoles(): Promise<void>;
 }

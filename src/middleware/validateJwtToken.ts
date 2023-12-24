@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { verifyToken } from "../services/userservice";
 import db from "../models/sqlconfig";
 import { Model } from "sequelize";
-import { VerifyTokenResponse } from "../definitions/user/userdefinitions";
+import { VerifyTokenResponse } from "../interfaces/user/user";
 import { UserAttributes } from "../models/user";
 
 const log4js = require("log4js");
