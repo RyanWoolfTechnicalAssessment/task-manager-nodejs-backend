@@ -15,10 +15,10 @@ import { IAddUserRoleRequest } from "../../useCases/interfaces/user/requestObjec
 
 export class UserRepositoryMockImpl implements IUserRepository {
   findUserById(id: number): Promise<UserAttributes | null> {
-    throw new Error("Method not implemented.");
+    return Promise.resolve(null);
   }
   findAllUserRolesByUserID(userId: number): Promise<string[]> {
-    throw new Error("Method not implemented.");
+    return Promise.resolve([]);
   }
   async findRolesByAuthorityList(
     authorityList: string[],

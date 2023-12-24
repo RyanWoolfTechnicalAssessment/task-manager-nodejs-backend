@@ -1,4 +1,3 @@
-import { UserrolestatusAttributes } from "../../../models/userrolestatus";
 import {
   LoginUserRequest,
   LoginUserResponse,

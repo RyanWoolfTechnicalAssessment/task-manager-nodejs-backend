@@ -1,50 +1,39 @@
 "use strict";
 import { Model } from "sequelize";
 
-export interface TaskAttributes {
+export interface SprintAttributes {
   id: number;
-  userId: number;
   projectId: number;
-  sprintId: number;
+  name: string;
   description: string;
 }
 
-export interface TaskInputAttributes {
-  userId: number;
-  projectId:number;
-  sprintId: number;
+export interface SprintInputAttributes {
+  projectId: number;
+  name: string;
   description: string;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
-  class task extends Model<TaskAttributes> implements TaskAttributes {
+  class sprint extends Model<SprintAttributes> implements SprintAttributes {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     id!: number;
-    userId!: number;
     projectId!: number;
-    sprintId!: number
+    name!: string;
     description!: string;
 
     static associate(models: any) {
-      models.task.belongsTo(models.user, {
-        foreignKey: "user_id",
+      models.sprint.belongsTo(models.project, {
+        foreignKey: "project_id",
       });
-
-      models.task.belongsTo(models.project,{
-        foreignKey: "project_id"
-      });
-
-      models.task.belongsTo(models.sprint,{
-        foreignKey: "sprint_id"
-      })
     }
   }
 
-  task.init(
+  sprint.init(
     {
       id: {
         type: DataTypes.BIGINT(20),
@@ -52,20 +41,15 @@ module.exports = (sequelize: any, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      userId: {
+      projectId:{
         type: DataTypes.BIGINT(20),
         allowNull: false,
-        field: "user_id",
+        field: "project_id"
       },
-      projectId: {
-        type: DataTypes.BIGINT(20),
+      name: {
+        type: DataTypes.STRING(100),
         allowNull: false,
-        field: "project_id",
-      },
-      sprintId: {
-        type: DataTypes.BIGINT(20),
-        allowNull: false,
-        field: "sprint_id",
+        field: "name",
       },
       description: {
         type: DataTypes.STRING(1000),
@@ -75,15 +59,15 @@ module.exports = (sequelize: any, DataTypes: any) => {
     },
     {
       sequelize,
-      modelName: "task",
+      modelName: "sprint",
       freezeTableName: true,
       indexes: [
-        // {
-        //   name: "task_description",
-        //   fields: ["description"],
-        // },
+        {
+          name: "sprint_name",
+          fields: ["name"],
+        },
       ],
     },
   );
-  return task;
+  return sprint;
 };

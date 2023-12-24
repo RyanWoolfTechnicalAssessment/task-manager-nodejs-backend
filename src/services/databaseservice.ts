@@ -13,6 +13,16 @@ import { AddUserImpl } from "../useCases/implementations/user/AddUserImpl";
 import { IAddUserRoleRequest } from "../useCases/interfaces/user/requestObjects/IAddUserRoleRequest";
 import { AddUserRoleImpl } from "../useCases/implementations/user/AddUserRoleImpl";
 import { IAddUserRole } from "../useCases/interfaces/user/IAddUserRole";
+import {ProjectRepositorySequalizeImpl} from "../repository/implementation/ProjectRepositorySequalizeImpl";
+import {IProjectRepository} from "../repository/interface/IProjectRepository";
+import {IAddProjectRequest} from "../useCases/interfaces/project/requestObjects/IAddProjectRequest";
+import {AddProjectImpl} from "../useCases/implementations/project/AddProjectImpl";
+import {IAddProject} from "../useCases/interfaces/project/IAddProject";
+import {IAddSprint} from "../useCases/interfaces/sprint/IAddSprint";
+import {ISprintRepository} from "../repository/interface/ISprintRepository";
+import {IAddSprintRequest} from "../useCases/interfaces/sprint/requestObjects/IAddSprintRequest";
+import {AddSprintImpl} from "../useCases/implementations/sprint/AddSprintImpl";
+import {SprintRepositorySequalizeImpl} from "../repository/implementation/SprintRepositorySequalizeImpl";
 
 export async function populateDatabase(): Promise<void> {
   await populateUserRoleStatus();
@@ -22,6 +32,12 @@ export async function populateDatabase(): Promise<void> {
   await populateUserRole();
   //Populate admin user
   //Populate admin user role
+  const projectObject = await populateDefaultProject();
+
+  if(projectObject?.project){
+    populateDefaultSprint(projectObject?.project.id);
+  }
+
   return;
 }
 
@@ -115,22 +131,67 @@ async function populateAdminUser() {
   }
 }
 
-async function populateUserRole() {
-  try {
-    const userRepository: IUserRepository = new UserRepositorySequalizeImpl();
-    const addUserRoleRequest: IAddUserRoleRequest = {
-      userName: "administrator@ryanwoolf.com",
-      authority: "ROLE_ADMIN",
-    };
+  async function populateUserRole() {
+    try {
+      const userRepository: IUserRepository = new UserRepositorySequalizeImpl();
+      const addUserRoleRequest: IAddUserRoleRequest = {
+        userName: "administrator@ryanwoolf.com",
+        authority: "ROLE_ADMIN",
+      };
 
-    const addUserRole: IAddUserRole = new AddUserRoleImpl(
-      addUserRoleRequest,
-      userRepository,
-    );
-    await addUserRole.init();
-  } catch (err: any) {
-    console.log(
-      `There was an error adding user roles for admin user:${err.message}`,
-    );
+      const addUserRole: IAddUserRole = new AddUserRoleImpl(
+          addUserRoleRequest,
+          userRepository,
+      );
+      await addUserRole.init();
+    } catch (err: any) {
+      console.log(
+          `There was an error adding user roles for admin user:${err.message}`,
+      );
+    }
   }
-}
+
+  async function populateDefaultProject(): Promise<IAddProject|null> {
+    try {
+      const projectRepository: IProjectRepository = new ProjectRepositorySequalizeImpl();
+      const addProjectRequest: IAddProjectRequest = {
+        name: "Default Project",
+        description: "This is the default project",
+      };
+
+      const addProject: IAddProject = new AddProjectImpl(
+          addProjectRequest,
+          projectRepository,
+      );
+      await addProject.init();
+      return addProject;
+    } catch (err: any) {
+      console.log(
+          `There was an error adding default project:${err.message}`,
+      );
+      return null;
+    }
+  }
+
+    async function populateDefaultSprint(projectId:number): Promise<IAddSprint|null> {
+      try {
+        const sprintRepository: ISprintRepository = new SprintRepositorySequalizeImpl();
+        const addSprintRequest: IAddSprintRequest = {
+          projectId: projectId,
+          name: "Default Sprint",
+          description: "This is the default sprint",
+        };
+
+        const addSprint: IAddSprint = new AddSprintImpl(
+            addSprintRequest,
+            sprintRepository,
+        );
+        await addSprint.init();
+        return addSprint;
+      } catch (err: any) {
+        console.log(
+            `There was an error adding default sprint:${err.message}`,
+        );
+        return null;
+      }
+  }

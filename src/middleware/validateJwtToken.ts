@@ -22,6 +22,7 @@ const validateJwtTokenUser = async (
   const unsecuredPathList: string[] = [
     "/user/login",
     "/user/testSingletonBehaviour",
+      "/task/addTask"
   ];
   const endpointRoleMap = new Map<string, string[]>([
     ["/user/registerUser", ["ROLE_ADMIN"]],

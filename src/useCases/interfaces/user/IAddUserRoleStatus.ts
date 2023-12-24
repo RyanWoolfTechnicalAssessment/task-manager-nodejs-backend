@@ -1,5 +1,4 @@
 import { UserrolestatusAttributes } from "../../../models/userrolestatus";
-import { IAddUserRoleStatusRequest } from "./requestObjects/IAddUserRoleStatusRequest";
 
 export interface IAddUserRoleStatus {
   userRoleStatus: any;

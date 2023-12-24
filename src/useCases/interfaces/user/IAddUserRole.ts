@@ -1,7 +1,6 @@
 import { RoleAttributes } from "../../../models/role";
 import { UserAttributes } from "../../../models/user";
 import { UserrolestatusAttributes } from "../../../models/userrolestatus";
-import { IAddUserRequest } from "./requestObjects/IAddUserRequest";
 import { UserroleAttributes } from "../../../models/userrole";
 import { IAddUserRoleRequest } from "./requestObjects/IAddUserRoleRequest";
 
